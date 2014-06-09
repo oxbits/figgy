@@ -13,7 +13,12 @@ def process_book_element(book_element):
     :returns:
     """
     try:
-        book = Alias.objects.filter(scheme='ISBN-10',value=book_element.xpath('aliases/alias[@scheme="ISBN-10"]')[0].values()[1])[0].book
+        isbn_10_list = book_element.xpath('aliases/alias[@scheme="ISBN-10"]')
+        isbn_10 = isbn_10_list[0]
+	isbn_10_value = isbn_10.values()[1]
+	aliases = Alias.objects.filter(scheme='ISBN-10', value=isbn_10_value)
+	alias = aliases[0]
+        book = alias.book
     except:
         book = Book()
 	book.save()
